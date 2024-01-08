@@ -139,7 +139,7 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-stethoscope"></i> Periksa</h1>
+                    <h1 class="page-header"><i class="fa fa-wheelchair"></i> Pasien</h1>
                 </div>
 
                 
@@ -155,17 +155,17 @@
 
                     <tr align="center" style="font-weight:bold">
                     <td width="5%">No</td>
-                    <td>Tanggal</td>
+                    <td>Hari</td>
                     <td>Nama</td>
-                    <td>Diagnosa</td>
-                    <td>Biaya Periksa</td>
+                    <td>No RM</td>
+                    <td>Keluhan</td>
                     <td width="15%">Aksi</td>
                     </tr>
 
                     <?php
                         include '../koneksi.php';
                         $no = 1;
-                        $query = "SELECT * FROM periksa INNER JOIN daftar_poli ON periksa.id_daftar_poli = daftar_poli.id_daftar_poli INNER JOIN pasien ON daftar_poli.id_pasien = pasien.id INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id_jadwal WHERE id_dokter= '$_SESSION[id_dokter]'";
+                        $query = "SELECT * FROM daftar_poli INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id_jadwal INNER JOIN pasien on daftar_poli.id_pasien = pasien.id WHERE id_dokter= '$_SESSION[id_dokter]'";
                         $result = mysqli_query($koneksi, $query);
 
                         while ($row = mysqli_fetch_array($result)) :
@@ -175,22 +175,126 @@
 
                                     <tr align="center">
                                     <td><?= $no++ ?></td>
-                                    <td><?= $row['tgl_periksa'] ?></td>
+                                    <td><?= $row['hari'] ?></td>
                                     <td><?= $row['nama'] ?></td>
-                                    <td><?= $row['catatan'] ?></td>
-                                    <td>Rp. <?= number_format($row['biaya_periksa']); ?></td>
+                                    <td><?= $row['no_rm'] ?></td>
+                                    <td><?= $row['keluhan'] ?></td>
                                     
                                     <td>
                                         <div class="btn-group" role="group">
-                                        <a title="Resep Obat" href="menu_resep_obat.php?id_periksa=<?php echo $row['id_periksa'];?>" type="button" class="btn btn-sm btn-success" ><i class="fa fa-h-square"></i></a>
-                                        <a title="Detail Periksa" href="menu_detail_periksa.php?id_periksa=<?php echo $row['id_periksa'];?>" type="button" class="btn btn-sm btn-primary" ><i class="fa fa-eyedropper"></i></a>
+                                        <a title="Diagnosa" href="menu_diagnosa.php?id_daftar_poli=<?php echo $row['id_daftar_poli'];?>" type="button" class="btn btn-sm btn-success" ><i class="fa fa-plus-square"></i></a>
                                         </div>
                                     </td>
                                     </tr>
 
-                                    <?php endwhile; ?>     
+                                  <!-- Awal Modal Ubah-->
+                                  <div class="modal fade" id="modalEdit<?=$no?>" role="dialog">
+                                  <div class="modal-dialog">
+        
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Modal Header</h4>
+                                      </div>
+        
+                                            <div class="modal-body">
+                                            <!-- Form ubah data obat disini -->
+                                            <form action="../pages/updateJadwal.php" method="post">
+                                            <input type="hidden" name="id_jadwal" value="<?= $row['id_jadwal']; ?>">
+                                                
+                                            
+                                                <div class="form-group">
+                                                    <label for="nama_obat">Hari</label>
+                                                    <input type="text" class="form-control" id="hari" name="hari" value="<?= $row['hari']; ?>" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="kemasan">Jam Mulai</label>
+                                                    <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" value="<?= $row['jam_mulai']; ?>" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="harga">Jam Selesai</label>
+                                                    <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" value="<?= $row['jam_selesai']; ?>" required>
+                                                </div>
+                                                
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Ubah</button>
+                                                    </div>
+                                            </form>
+                                            </div>
+        
+                                      
+                                    </div>
+        
+                                  </div>
+                                  </div>
+                                  <!-- Akhir Modal Ubah-->
+
+                                  <!-- Awal Modal Hapus-->
+                                  <div class="modal fade" id="modalHapus<?=$no?>" role="dialog">
+                                  <div class="modal-dialog">
+        
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Modal Header</h4>
+                                      </div>
+        
+                                            <div class="modal-body">
+                                            <!-- Form ubah data obat disini -->
+                                            <form action="../pages/hapusObat.php" method="post">
+                                            <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                                            
+                                            <h5 class="text-center"> Apakah anda yakin ingin menghapus data ini? </h5>
+                                            <br>
+                                            <h5 class="text-center " style="color:red;"><?= $row['nama_obat'] ?></h5>
+
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger" name="bHapus">Hapus</button>
+                                            </div>  
+                                            
+                                            </form>
+                                            </div>
+
+                                          
+        
+                                      
+                                    </div>
+        
+                                  </div>
+                                  </div>
+                                  <!-- Akhir Modal Hapus-->
+
+
+
+
+
+                                    <?php endwhile; ?>
+
+                                
+
+
+
+                               
+                        
+                    
+
+
+
+
+
+
+                                
                     </table>
-    
+                    
+                    
+                    
+
+                    
+
                 </div>
             </div>
 </div>  

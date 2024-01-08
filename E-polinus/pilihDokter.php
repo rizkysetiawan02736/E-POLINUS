@@ -101,7 +101,7 @@
                         <?php
                         include 'koneksi.php';
                         $no = 1;
-                        $query = "SELECT * FROM dokter INNER JOIN poli ON dokter.id_poli=poli.id INNER JOIN jadwal_periksa ON jadwal_periksa.id_dokter = dokter.id WHERE dokter.id !='5'";
+                        $query = "SELECT * FROM dokter INNER JOIN poli ON dokter.id_poli=poli.id INNER JOIN jadwal_periksa ON jadwal_periksa.id_dokter = dokter.id WHERE dokter.id !='5' AND jadwal_periksa.status !='0'";
                         $result = mysqli_query($koneksi, $query);
 
                         while ($row = mysqli_fetch_array($result)) :

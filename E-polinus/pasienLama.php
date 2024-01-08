@@ -37,6 +37,7 @@
 
                 //fungsi penomoran otomatis
                 //A-001-01012024
+                $id_jadwal = $_GET['id_jadwal'];
                 $today = date('dmy');
                 $queryNo = mysqli_query($koneksi, "SELECT max(no_antrian) as maxno FROM daftar_poli WHERE right(no_antrian, 6) = '$today'");
                 $dataNo = mysqli_fetch_assoc($queryNo);
@@ -52,14 +53,14 @@
                 ?>
 
 
-                <?php
+                <!-- <?php
                 include 'koneksi.php';
                 $id_jadwal = $_GET['id_jadwal'];
                 $no = 1;
                 $query = "SELECT * FROM jadwal_periksa WHERE id_jadwal='$id_jadwal'";
                 $result = mysqli_query($koneksi, $query);
                 while ($row = mysqli_fetch_array($result)) :
-                ?>
+                ?> -->
 
 
 
@@ -123,7 +124,7 @@
 						<i class="zmdi zmdi-long-arrow-right"></i>
 					</button>
 				</form>
-                <?php endwhile; ?>
+                <!-- <?php endwhile; ?> -->
 
                 <script src="js/jquery-1.12.4.min.js"></script>   
                 <script type="text/javascript">

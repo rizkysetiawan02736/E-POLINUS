@@ -33,9 +33,21 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-    <!-- Tokenfield -->
-    <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.css"> -->
+    <!-- Css Files-->
+  <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"> 
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.min.css">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+     -->
+   <!-- css untuk select2 -->
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jika menggunakan bootstrap4 gunakan css ini  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+
+    
+   
+  
+    
 
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
@@ -139,9 +151,102 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-stethoscope"></i> Periksa</h1>
+                    <h1 class="page-header"><i class="fa fa-h-square"></i> Resep Obat</h1>
                 </div>
 
+               
+
+                
+
+                <form action="../pages/tambahDetailPeriksa.php" method="post">   
+
+                <div class="card-body">
+			    <div class="row">
+
+                    
+    
+			    	<div class="form-holder" style="margin-left: 30px;">
+                    <?php
+                     include '../koneksi.php';
+                     $id_periksa = $_GET['id_periksa'];
+                     $no = 1;
+                     $query = "SELECT * FROM periksa WHERE id_periksa='$id_periksa'";
+                     $result = mysqli_query($koneksi, $query);
+                     while ($row = mysqli_fetch_array($result)) :
+                     ?>
+
+
+			    		<label class="font-weight-bold">ID Periksa</label>
+			    		<input style=" width:300px; " autocomplete="off" type="text" name="id_periksa" value="<?php echo $row['id_periksa'] ?>" required class="form-control" readonly/>
+			    	<?php endwhile; ?>
+                    </div>
+                    <br>
+			                                    
+                    <div class="form-holder" style="margin-left: 30px;">
+			    		<label class="font-weight-bold">Obat</label>
+			    		<select id="obat" multiple="multiple" name="obat[]" class="js-example-basic-multiple" style=" width:300px; ">
+
+                        <?php
+                        include '../koneksi.php';
+                      
+                        
+                        $query = "SELECT * FROM obat";
+                        $result = mysqli_query($koneksi, $query);
+                        if(mysqli_num_rows($result)>0){
+                            foreach($result as $row){
+                                ?>
+                                <option value="<?=$row['id'];?>"><?=$row['nama_obat'];?> </option>
+                                <?php
+                            }
+                        }else{
+                            ?> <option value="No record found"></option><?php
+                        }
+                        // while ($row = mysqli_fetch_array($result)) :
+                        ?>
+
+                        </select>
+			    	</div>
+                    <br>
+
+                    
+    
+			    	
+			    </div>
+		    </div>
+            <br>
+
+		<div class="card-footer text-left" style="margin-left: 15px;">
+            <button name ="save_resep" type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
+            
+        </div>
+        
+
+
+
+
+                
+                </form>
+
+                
+
+                
+                 
+                <!-- <script>
+                $(document).ready(function(){
+
+                    $('#tokenfield').tokenfield({
+                      autocomplete: {
+                        source: ['red','blue','green','yellow','violet','brown','purple','black','white'],
+                        delay: 100
+                      },
+                      showAutocompleteOnFocus: true
+                    })
+
+                })
+                    
+                    
+                </script> -->
+                
                 
 
                 <!-- /.col-lg-12 -->
@@ -149,50 +254,7 @@
             <br>
                
 
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-
-                    <tr align="center" style="font-weight:bold">
-                    <td width="5%">No</td>
-                    <td>Tanggal</td>
-                    <td>Nama</td>
-                    <td>Diagnosa</td>
-                    <td>Biaya Periksa</td>
-                    <td width="15%">Aksi</td>
-                    </tr>
-
-                    <?php
-                        include '../koneksi.php';
-                        $no = 1;
-                        $query = "SELECT * FROM periksa INNER JOIN daftar_poli ON periksa.id_daftar_poli = daftar_poli.id_daftar_poli INNER JOIN pasien ON daftar_poli.id_pasien = pasien.id INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id_jadwal WHERE id_dokter= '$_SESSION[id_dokter]'";
-                        $result = mysqli_query($koneksi, $query);
-
-                        while ($row = mysqli_fetch_array($result)) :
-
-                            ?>
-
-
-                                    <tr align="center">
-                                    <td><?= $no++ ?></td>
-                                    <td><?= $row['tgl_periksa'] ?></td>
-                                    <td><?= $row['nama'] ?></td>
-                                    <td><?= $row['catatan'] ?></td>
-                                    <td>Rp. <?= number_format($row['biaya_periksa']); ?></td>
-                                    
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                        <a title="Resep Obat" href="menu_resep_obat.php?id_periksa=<?php echo $row['id_periksa'];?>" type="button" class="btn btn-sm btn-success" ><i class="fa fa-h-square"></i></a>
-                                        <a title="Detail Periksa" href="menu_detail_periksa.php?id_periksa=<?php echo $row['id_periksa'];?>" type="button" class="btn btn-sm btn-primary" ><i class="fa fa-eyedropper"></i></a>
-                                        </div>
-                                    </td>
-                                    </tr>
-
-                                    <?php endwhile; ?>     
-                    </table>
-    
-                </div>
-            </div>
+            
 </div>  
         <!-- /#page-wrapper -->
 
@@ -202,18 +264,6 @@
 
 </div>
 <!-- /#wrapper -->
-
-
-
-<!-- <script>
-$('#tokenfield').tokenfield({
-  autocomplete: {
-    source: ['red','blue','green','yellow','violet','brown','purple','black','white'],
-    delay: 100
-  },
-  showAutocompleteOnFocus: true
-})
-</script> -->
 
   <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
@@ -232,12 +282,56 @@ $('#tokenfield').tokenfield({
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 
-    <!-- Tokenfield JS -->
-    
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.js"></script>
+
+    <!-- wajib jquery  -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <!-- js untuk bootstrap4  -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
+    </script>
+    <!-- js untuk select2  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- <script>
+        $(document).ready(function () {
+            $('#obat').select2({
+                theme: 'bootstrap4',
+                allowClear: true,
+                placeholder: 'cari nama obat',
+                ajax: {
+                    dataType: 'json',
+                    url: 'data.php',
+                    delay: 800,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        }
+                    },
+                    processResults: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    },
+                }
+            })
+        });
+    </script> -->
+
+    <script>
+        $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+    </script>
+
+    
+    
+
     
  
 

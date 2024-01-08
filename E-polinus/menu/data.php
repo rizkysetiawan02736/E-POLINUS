@@ -21,7 +21,9 @@
 
         //lakukan looping untuk menampilkan data yang sesuai
         while($row = mysqli_fetch_assoc($data)) {
-            $list[$key]['text'] = $row['nama_obat']; 
+            // $list[$key]['text'] = $row['nama_obat']; 
+            // $list[$key]['text'] = $row['harga']; 
+            $list[$key]['text'] = $row['id'];
             $list[$key]['id'] = $row['id'];
             $key++;
         }

@@ -139,7 +139,7 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-stethoscope"></i> Periksa</h1>
+                    <h1 class="page-header"><i class="fa fa-eyedropper"></i> Detail Periksa</h1>
                 </div>
 
                 
@@ -155,40 +155,56 @@
 
                     <tr align="center" style="font-weight:bold">
                     <td width="5%">No</td>
-                    <td>Tanggal</td>
-                    <td>Nama</td>
-                    <td>Diagnosa</td>
-                    <td>Biaya Periksa</td>
-                    <td width="15%">Aksi</td>
+
+                    <td>Obat</td>
+                    <td>Harga</td>
+                       
+                
+
+                    
+                    
                     </tr>
 
                     <?php
                         include '../koneksi.php';
+                       
+                        $id_periksa = $_GET['id_periksa'];
                         $no = 1;
-                        $query = "SELECT * FROM periksa INNER JOIN daftar_poli ON periksa.id_daftar_poli = daftar_poli.id_daftar_poli INNER JOIN pasien ON daftar_poli.id_pasien = pasien.id INNER JOIN jadwal_periksa ON daftar_poli.id_jadwal = jadwal_periksa.id_jadwal WHERE id_dokter= '$_SESSION[id_dokter]'";
+                        $total = 0;
+                        $query = "SELECT * FROM detail_periksa INNER JOIN periksa ON detail_periksa.id_periksa = periksa.id_periksa INNER JOIN obat ON detail_periksa.id_obat = obat.id WHERE detail_periksa.id_periksa = $id_periksa";
                         $result = mysqli_query($koneksi, $query);
 
                         while ($row = mysqli_fetch_array($result)) :
+                            $total += $row['harga'];
+                            $by = $row['biaya_periksa'];
+                            $sr = $total + $by;
 
                             ?>
 
 
                                     <tr align="center">
                                     <td><?= $no++ ?></td>
-                                    <td><?= $row['tgl_periksa'] ?></td>
-                                    <td><?= $row['nama'] ?></td>
-                                    <td><?= $row['catatan'] ?></td>
-                                    <td>Rp. <?= number_format($row['biaya_periksa']); ?></td>
-                                    
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                        <a title="Resep Obat" href="menu_resep_obat.php?id_periksa=<?php echo $row['id_periksa'];?>" type="button" class="btn btn-sm btn-success" ><i class="fa fa-h-square"></i></a>
-                                        <a title="Detail Periksa" href="menu_detail_periksa.php?id_periksa=<?php echo $row['id_periksa'];?>" type="button" class="btn btn-sm btn-primary" ><i class="fa fa-eyedropper"></i></a>
-                                        </div>
-                                    </td>
+                                    <td><?= $row['nama_obat'] ?></td>
+                                    <td>Rp. <?= number_format($row['harga']); ?></td>
                                     </tr>
 
                                     <?php endwhile; ?>     
+
+                                    <tr>
+                                    <td colspan="2"><b>Total Obat</b></td>
+                                    <td align="center"><b>Rp. <?= number_format($total); ?></b></td>
+                                    </tr>
+
+                                    <tr>
+                                    <td colspan="2"><b>Biaya Periksa</b></td>
+                                    <td align="center"><b>Rp. <?= number_format($by); ?></b></td>
+                                    </tr>
+
+                                    <tr>
+                                    <td colspan="2"><b>Biaya Total</b></td>
+                                    <td align="center"><b>Rp. <?= number_format($sr); ?></b></td>
+                                    </tr>
+
                     </table>
     
                 </div>

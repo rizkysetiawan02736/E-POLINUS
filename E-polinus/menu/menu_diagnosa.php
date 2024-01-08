@@ -123,8 +123,14 @@
                         </li>
 
                         <li>
+                            <a href="menu_pasien_dokter.php"><i class="fa fa-wheelchair fa-fw"></i>  Pasien</a>
+                        </li>
+
+                        <li>
                             <a href="menu_periksa.php"><i class="fa fa-stethoscope fa-fw"></i>  Periksa</a>
                         </li>
+
+                        
                         
                         
                         <li>
@@ -157,7 +163,7 @@
                 while ($row = mysqli_fetch_array($result)) :
                 ?>
 
-                <form action="" method="post">   
+                <form action="../pages/tambahPeriksa.php" method="post">   
 
                 <div class="card-body">
 			    <div class="row">
@@ -167,6 +173,12 @@
 			    	<div class="form-holder" style="margin-left: 30px;">
 			    		<label class="font-weight-bold">ID Daftar Poli</label>
 			    		<input style=" width:300px; " autocomplete="off" type="text" name="id_daftar_poli" value="<?php echo $row['id_daftar_poli'] ?>" required class="form-control" readonly/>
+			    	</div>
+                    <br>
+
+			    	<div class="form-holder" style="margin-left: 30px;">
+			    		<label class="font-weight-bold">Tanggal Periksa</label>
+			    		<input style=" width:300px; " autocomplete="off" type="date" name="tanggal_periksa" required class="form-control" />
 			    	</div>
                     <br>
 
@@ -183,13 +195,13 @@
                     <br>
 
 
-                    <div class="form-holder" style="margin-left: 30px;">
+                    <!-- <div class="form-holder" style="margin-left: 30px;">
 			    		<label class="font-weight-bold">Obat</label>
-			    		<select id="obat" multiple="multiple" name="nama_obat[]" class="form-control" style=" width:300px; ">
+			    		<select id="obat" multiple="multiple" name="obat[]" class="form-control" style=" width:300px; ">
 
                         </select>
 			    	</div>
-                    <br>
+                    <br> -->
 
                     <div class="form-holder" style="margin-left: 30px;">
 			    		<label class="font-weight-bold">Biaya Periksa</label>
@@ -317,6 +329,8 @@
             })
         });
     </script>
+
+    
     
 
     

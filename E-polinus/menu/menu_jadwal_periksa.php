@@ -111,8 +111,14 @@
                         </li>
 
                         <li>
+                            <a href="menu_pasien_dokter.php"><i class="fa fa-wheelchair fa-fw"></i>  Pasien</a>
+                        </li>
+
+                        <li>
                             <a href="menu_periksa.php"><i class="fa fa-stethoscope fa-fw"></i>  Periksa</a>
                         </li>
+
+                        
                         
                         
                         <li>
@@ -177,6 +183,7 @@
                                             <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
                                         </div>
                                         
+                                        
                                             <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary">Tambah</button>
@@ -206,7 +213,9 @@
                     <td>Hari</td>
                     <td>Jam Mulai</td>
                     <td>Jam Selesai</td>
-                    <td width="15%">Aksi</td>
+                    <td>Status</td>
+                    <td width="5%">aksi</td>
+                    <!-- <td width="15%">Aksi</td> -->
                     </tr>
 
                     <?php
@@ -225,11 +234,28 @@
                                     <td><?= $row['hari'] ?></td>
                                     <td><?= $row['jam_mulai'] ?></td>
                                     <td><?= $row['jam_selesai'] ?></td>
-                                    <td>
+                                    <td> <?php
+                                        if($row['status'] == 0){
+                                            echo '<a class="btn btn-sm btn-warning" >Tutup</a>';
+                                        } else{
+                                            echo '<a class="btn btn-sm btn-info" >Buka</a>';
+                                        }
+                                        ?> </td>
+                                    <!-- <td><?= $row['status'] ?></td> -->
+                                    <!-- <td>
                                         <div class="btn-group" role="group">
                                         <a title="Edit Data" type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalEdit<?=$no?>"><i class="fa fa-edit"></i></a>
                                         <a title="Hapus Data" type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalHapus<?=$no?>" ><i class="fa fa-trash"></i></a>
                                         </div>
+                                    </td> -->
+                                    <td>
+                                        <?php
+                                        if($row['status'] == 0){
+                                            echo '<a class="btn btn-sm btn-success" href="status.php?id_jadwal=' . $row['id_jadwal'] . '&status=1">Active</a>';
+                                        } else{
+                                            echo '<a class="btn btn-sm btn-danger" href="status.php?id_jadwal=' . $row['id_jadwal'] . '&status=0">InActive</a>';
+                                        }
+                                        ?>
                                     </td>
                                     </tr>
 
@@ -276,6 +302,8 @@
                                   </div>
                                   </div>
                                   <!-- Akhir Modal Ubah-->
+
+                                  
 
                                   <!-- Awal Modal Hapus-->
                                   <div class="modal fade" id="modalHapus<?=$no?>" role="dialog">

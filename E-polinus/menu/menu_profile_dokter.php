@@ -106,8 +106,13 @@
                         </li>
 
                         <li>
+                            <a href="menu_pasien_dokter.php"><i class="fa fa-wheelchair fa-fw"></i>  Pasien</a>
+                        </li>
+
+                        <li>
                             <a href="menu_periksa.php"><i class="fa fa-stethoscope fa-fw"></i>  Periksa</a>
                         </li>
+                        
                         
                         
                         <li>
